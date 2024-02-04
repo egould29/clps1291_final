@@ -1,8 +1,10 @@
-def mds():
+import pandas as pd
+
+def mds(data : pd.DataFrame):
     print('Doing multi-dimensional scaling!')
 
-def hc():
+def hc(data : pd.DataFrame):
     print('Doing hierarchical clustering!')
 
-def pca():
+def pca(data : pd.DataFrame):
     print('Doing principal component analysis!')

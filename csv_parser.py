@@ -1,20 +1,28 @@
 import csv
+import pandas as pd
 from algorithms import mds, hc, pca
 
 # TODO: how to represent the data? numpy array? tuple of numpy arrays?
 def parse(fn : str):
-    pass
+    try:
+        df = pd.read_csv(f"data/{fn}")
+        # print(df)
+        return (True, df)
+    except FileNotFoundError:
+        return (False, None)
 
 def main():
     is_valid = False
+    intro_msg = "Please enter the filename of the data you want to evaluate, or type 'q' to quit.\n"
+    response = input(intro_msg)
 
-    while not is_valid:
-        response = input("Please enter the filename of the data you want to evaluate, or type 'q' to quit.\n")
-        # TODO: check if the filename is valid
-        filename = response # if valid
+    while not is_valid and not response.lower() == 'q':
+        is_valid, data = parse(response)
+        if not is_valid:
+            print("Invalid filename.")
+            response = input(intro_msg)
 
-    # TODO: parse the csv
-    parse(filename)
+    print(data)
 
     while not response.lower() == "q":
         prompt = "Would you like to test another algorithm on this data? Hit 'enter' to continue, or 'q' to quit.\n"
