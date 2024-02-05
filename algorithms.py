@@ -20,7 +20,7 @@ def run_mds(data : np.ndarray):
     elif rows == cols:
         labels = []
     else:
-        return False
+        raise ValueError
     
     scaling = MDS(dissimilarity='precomputed', random_state=0)
     points = scaling.fit_transform(data)
@@ -28,23 +28,29 @@ def run_mds(data : np.ndarray):
     return points, labels
 
 def mds(data : np.ndarray):
-    points, labels = run_mds(data)
+    try:
+        points, labels = run_mds(data)
 
-    plt.figure(0)
-    plt.scatter(points[:,0], points[:,1])
-    for i in range(len(labels)):
-        plt.annotate(labels[i], points[i])
+        plt.figure(0)
+        plt.scatter(points[:,0], points[:,1])
+        for i in range(len(labels)):
+            plt.annotate(labels[i], points[i])
     
-    plt.show()
+        plt.show()
+    except ValueError:
+        print('Your data has an incompatible shape.')
 
 def hc(data : np.ndarray):
-    points, labels = run_mds(data)
+    try:
+        points, labels = run_mds(data)
 
-    p_dist = pdist(points)
+        p_dist = pdist(points)
 
-    plt.figure(1)
-    dendrogram(linkage(squareform(p_dist)), labels=labels)
-    plt.show()
+        plt.figure(1)
+        dendrogram(linkage(squareform(p_dist)), labels=labels)
+        plt.show()
+    except ValueError:
+        print('Your data has an incompatible shape.')
 
 # from homework 2
 def biplot(data, pc_coeff, labels):
@@ -73,6 +79,5 @@ def pca(data : np.ndarray):
     p = PCA()
     transformed_data = p.fit_transform(data)
     coefficients = p.components_
-    evr = p.explained_variance_ratio_
 
     biplot(transformed_data, coefficients, labels)
