@@ -58,7 +58,6 @@ def biplot(data, pc_coeff, labels):
     ys = ys/(ys.max() - ys.min())
     plt.scatter(xs, ys )
     for i in range(n):
-        print(labels[i], pc_coeff[0,i], pc_coeff[1,i])
         plt.arrow(0, 0, pc_coeff[0,i], pc_coeff[1,i], color = 'r', alpha = 0.7)
         plt.text(pc_coeff[0,i] + np.sign(pc_coeff[0,i]) * 0.02, pc_coeff[1,i] + np.sign(pc_coeff[1,i]) * 0.02, labels[i], color = 'g', ha = 'center', va = 'center')
     plt.xlabel('PC1')
