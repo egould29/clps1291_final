@@ -6,7 +6,7 @@ def parse(fn : str):
     try:
         df = pd.read_csv(f"data/{fn}")
         # print(df)
-        return (True, df.to_numpy())
+        return (True, df)
     except FileNotFoundError:
         return (False, None)
 

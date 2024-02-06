@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.manifold import MDS
 from sklearn.decomposition import PCA
@@ -6,20 +7,15 @@ from scipy.spatial.distance import pdist, squareform
 from scipy.cluster.hierarchy import linkage, dendrogram
 
 # helper method, factoring out the running of the MDS algorithm
-def run_mds(data : np.ndarray):
-    # assume that if it's not a square matrix, the extra row/column is for labels.
-    # if it's imbalanced by more than 1, let the user know the shape of their data
-    # doesn't fit.
+def run_mds(data : pd.DataFrame):
+
+    labels = list(data.columns)
+    data = data.to_numpy()
+
+    # ensure that the data has the correct shape
     rows, cols = np.shape(data)
-    if rows - cols == 1:
-        labels = data[0].tolist()
-        data = data[1:]
-    elif cols - rows == 1:
-        labels = data[:,0].tolist()
-        data = data[:,1:]
-    elif rows == cols:
-        labels = []
-    else:
+    if not rows == cols:
+        print(data)
         raise ValueError
     
     scaling = MDS(dissimilarity='precomputed', random_state=0)
@@ -27,7 +23,7 @@ def run_mds(data : np.ndarray):
 
     return points, labels
 
-def mds(data : np.ndarray):
+def mds(data : pd.DataFrame):
     try:
         points, labels = run_mds(data)
 
@@ -40,7 +36,7 @@ def mds(data : np.ndarray):
     except ValueError:
         print('Your data has an incompatible shape.')
 
-def hc(data : np.ndarray):
+def hc(data : pd.DataFrame):
     try:
         points, labels = run_mds(data)
 
@@ -71,10 +67,10 @@ def biplot(data, pc_coeff, labels):
     plt.grid()
     plt.show()
 
-def pca(data : np.ndarray):
+def pca(data : pd.DataFrame):
     # assumes that the labels are the first row of data
-    labels = data[0].tolist()
-    data = data[1:]
+    labels = list(data.columns)
+    data = data.to_numpy()
 
     p = PCA()
     transformed_data = p.fit_transform(data)
